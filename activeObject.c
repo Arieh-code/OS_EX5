@@ -2,6 +2,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void *active_object_thread(void *arg)
 {
@@ -10,9 +11,13 @@ void *active_object_thread(void *arg)
     TaskFunction func = activeObj->func;
     void *task;
 
-    while ((task = queue_dequeue(queue)) != NULL)
+    while (activeObj->active)
     {
-        func(task);
+        task = queue_dequeue(queue);
+        if (task != NULL)
+        {
+            func(task);
+        }
     }
 
     pthread_exit(NULL);
@@ -47,7 +52,10 @@ Queue *getQueue(ActiveObject *activeObj)
 
 void StopActiveObject(ActiveObject *activeObj)
 {
+    printf("Stopping active object...\n");
     activeObj->active = false;
+    queue_enqueue(activeObj->queue, NULL); // Enqueue a NULL task to wake up the thread
     pthread_join(activeObj->thread, NULL);
     free(activeObj);
+    printf("Active object stopped.\n");
 }

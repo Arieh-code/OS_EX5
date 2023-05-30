@@ -1,5 +1,4 @@
-#ifndef ST_PIPELINE_H
-#define ST_PIPELINE_H
+#pragma once
 
 #include <stdbool.h>
 #include "queue.h"
@@ -25,5 +24,3 @@ void task_4(void *arg);
 void setup_pipeline(int num_tasks, int seed);
 
 void stop_pipeline();
-
-#endif /* ST_PIPELINE_H */

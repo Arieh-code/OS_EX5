@@ -1,5 +1,6 @@
 #pragma once
-#include <bits/pthreadtypes.h>
+// #include <bits/pthreadtypes.h>
+#include <pthread.h>
 
 typedef struct
 {

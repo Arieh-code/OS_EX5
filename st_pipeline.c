@@ -18,10 +18,11 @@ void task_1(void *arg)
 
     for (int i = 0; i < task->task_count; i++)
     {
+        Task *newTask = (Task *)malloc(sizeof(Task)); // Create a new task
         int number = rand() % 900000 + 100000;
-        task->number = number;
-        queue_enqueue(getQueue(ao2), task);
+        newTask->number = number;
         sleep(1);
+        queue_enqueue(getQueue(ao2), newTask); // Enqueue the new task
     }
 
     free(task);
@@ -58,9 +59,18 @@ void task_4(void *arg)
     printf("%d\n", number);
     number += 2;
     printf("%d\n", number);
-    if (number == task->seed)
+
+    task->task_count++; // Increment the task count
+
+    if (task->task_count >= 1) // Stop the pipeline after 10 tasks
+    {
+        printf("Stopping pipeline\n"); // Debug print
         stop_pipeline();
-    free(task);
+        free(task);
+        return; // Return early to avoid further processing
+    }
+
+    // free(task);
 }
 
 void setup_pipeline(int num_tasks, int seed)
@@ -90,8 +100,42 @@ void setup_pipeline(int num_tasks, int seed)
 
 void stop_pipeline()
 {
+    printf("Entered stop_pipeline\n");
+
+    // Wait for all active objects to complete their tasks
+    pthread_mutex_lock(&ao1->queue->mutex);
+    printf("Before ao1 mutex lock\n");
+
+    while (ao1->queue->count > 0 || ao2->queue->count > 0 ||
+           ao3->queue->count > 0 || ao4->queue->count > 0)
+    {
+        printf("All queues are not empty, waiting...\n");
+        pthread_cond_wait(&ao1->queue->cond, &ao1->queue->mutex);
+    }
+
+    pthread_mutex_unlock(&ao1->queue->mutex);
+    printf("All queues are empty\n");
+
+    // Stop the active objects
+    printf("Stopping active objects...\n");
     StopActiveObject(ao1);
     StopActiveObject(ao2);
     StopActiveObject(ao3);
     StopActiveObject(ao4);
+
+    // Wait for active objects to complete
+    printf("Waiting for active objects to complete...\n");
+    pthread_join(ao1->thread, NULL);
+    pthread_join(ao2->thread, NULL);
+    pthread_join(ao3->thread, NULL);
+    pthread_join(ao4->thread, NULL);
+
+    // Free active objects
+    printf("Freeing active objects...\n");
+    free(ao1);
+    free(ao2);
+    free(ao3);
+    free(ao4);
+
+    printf("Finished stop_pipeline.\n");
 }
