@@ -62,13 +62,13 @@ void task_4(void *arg)
 
     task->task_count++; // Increment the task count
 
-    if (task->task_count >= 1) // Stop the pipeline after 10 tasks
-    {
-        printf("Stopping pipeline\n"); // Debug print
-        stop_pipeline();
-        free(task);
-        return; // Return early to avoid further processing
-    }
+    // if (task->task_count >= 1) // Stop the pipeline after 10 tasks
+    // {
+    //     printf("Stopping pipeline\n"); // Debug print
+    //     stop_pipeline();
+    //     free(task);
+    //     return; // Return early to avoid further processing
+    // }
 
     // free(task);
 }
