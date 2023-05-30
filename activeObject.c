@@ -52,10 +52,10 @@ Queue *getQueue(ActiveObject *activeObj)
 
 void StopActiveObject(ActiveObject *activeObj)
 {
-    printf("Stopping active object...\n");
+    // printf("Stopping active object...\n");
     activeObj->active = false;
     queue_enqueue(activeObj->queue, NULL); // Enqueue a NULL task to wake up the thread
     pthread_join(activeObj->thread, NULL);
     free(activeObj);
-    printf("Active object stopped.\n");
+    // printf("Active object stopped.\n");
 }

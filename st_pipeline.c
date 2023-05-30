@@ -106,15 +106,15 @@ void stop_pipeline()
     StopActiveObject(ao3);
     StopActiveObject(ao4);
 
-    // Wait for active objects to complete
-    pthread_join(ao1->thread, NULL);
-    pthread_join(ao2->thread, NULL);
-    pthread_join(ao3->thread, NULL);
-    pthread_join(ao4->thread, NULL);
+    // // Wait for active objects to complete
+    // pthread_join(ao1->thread, NULL);
+    // pthread_join(ao2->thread, NULL);
+    // pthread_join(ao3->thread, NULL);
+    // pthread_join(ao4->thread, NULL);
 
-    // Free active objects
-    free(ao1);
-    free(ao2);
-    free(ao3);
-    free(ao4);
+    // // Free active objects
+    // free(ao1);
+    // free(ao2);
+    // free(ao3);
+    // free(ao4);
 }
