@@ -1,6 +1,7 @@
 #include "activeObject.h"
 #include <pthread.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 void *active_object_thread(void *arg)
 {

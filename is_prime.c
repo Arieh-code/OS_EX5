@@ -1,7 +1,7 @@
 #include "is_prime.h"
 #include <math.h>
 
-bool is_prime(unsigned int number)
+bool isPrime(unsigned int number)
 {
     // Handle special cases for 0 and 1
     if (number < 2)
